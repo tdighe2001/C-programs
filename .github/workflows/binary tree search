@@ -1,0 +1,164 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct node{
+    char *treename;
+    struct node *left, *right;
+};
+
+struct node *root = NULL;
+
+void treeinsert(char *newname);
+void treedelete(char *oldname);
+void treesearch(char *searchname, struct node **current, struct node **previous,struct node *root, int *found);
+
+int main()
+{
+    int n=0, i;
+        char newname[20];
+
+        /*struct node *head = NULL;*/
+        struct node *listIndex;
+        
+        printf("Enter the number of elements in the list: ");
+        scanf("%d", &n);
+        
+        printf("Enter list elements: ");
+        for (i = 0; i < n; i++)
+        {
+            scanf("%s", newname);
+            treeinsert(strdup(newname));
+        }
+        
+        printf("The list of elements is: \n");
+        for (listIndex = root; listIndex != NULL; listIndex = listIndex->right)
+        {
+            printf("%s \n", listIndex->treename);
+        }
+/*
+        printf("Enter name to be deleted: ");
+        scanf("%s", newName);
+        
+        listdelete(newName);
+
+        printf("The updated list of elements is: \n");
+        for (listIndex = listHead; listIndex != NULL; listIndex = listIndex->next)
+        {
+            printf("%s \n", listIndex->name);
+        }
+*/
+        return 0;
+}
+
+
+/* binary tree insertion*/
+
+void treeinsert(char *newname)
+{
+    struct node *current, *previous, *newnode;
+    int found;
+    int notFound, strcmpResult;
+
+    treesearch(newname, &current, &previous, root, &found);
+    
+    if(found != 1)
+    {
+        newnode = (struct node *)malloc(sizeof(struct node));
+        /*with newnode -> do
+         
+         ((strcmpResult = strcmp(searchName,(*current)->name)) <= 0)
+         */
+        newnode->treename = newname;
+        newnode->left = NULL;
+        newnode->right = NULL;
+        
+        if (root != NULL)
+        {
+            /*with previous -> do */
+             
+            if ((strcmpResult = strcmp(newname,previous->treename)) <= 0)
+                previous->left = newnode;
+            else (previous->right = newnode);
+        }
+        else (root = newnode);
+    }
+    else printf("%s is already present", newname);
+}
+
+void treedelete(char *oldname)
+{
+    int found;
+    struct node *current, *previous;
+    
+    treesearch((oldname, &current, &previous, root, &found);
+    
+    if (found)
+    {
+        if (previous != NULL)
+        {
+            if(oldname < previous) /*weird strcomp thing*/
+                leftsubtree(&current, &previous, root);
+            else rightsubtree(&current, &previous, root);
+        }
+        else(rightsubtree(&current, &previous, root));
+    }
+    else (printf("%s is not present", oldname));
+}
+
+void treesearch(char *searchname, struct node **current, struct node **previous, struct node *root, int *found)
+{
+    int notfound, strcmpResult;
+
+    *previous = NULL;
+    *current = root;
+    notfound = 1;
+    
+    while(notfound && *current != NULL)
+    {
+        if ((strcmpResult = strcmp(searchname,(*current)->treename)) == 0)
+            
+            (notfound = 0);
+        else
+            /* if searchname != treename*/
+        {
+            *previous = *current;
+            /*if ((*current)->treename > searchn)*/
+            if (strcmpResult < 0)
+                *current = (*current)-> left;
+            else *current = (*current)-> right;
+        }
+        /* else (notfound = 0);*/
+    }
+    if (notfound)
+        *found = 0;
+    else *found = 1;
+}
+
+void rightsubtree(struct node *current, *previous, struct node root)
+{
+     struct node *newcurrent, *newprevious
+    
+    newprevious = previous;
+    newcurrent = current -> right;
+    if (previous != NULL)
+        previous-> right = current-> right
+    else(root = current-> right);
+    while (newcurrent != NULL)
+    {
+        newprevious = newcurrent;
+        newcurrent = newcurrent-> left
+    }
+    if(current-> right != NULL)
+    {
+        if(newprevious != NULL)
+            newprevious-> left = current-> left;
+        else(root = current-> left)
+    }
+    else
+    {
+        if(previous != NULL)
+            previous-> right = current-> left
+        else(root = current-> left);
+    }
+    /*dispose(current)*/
+}
